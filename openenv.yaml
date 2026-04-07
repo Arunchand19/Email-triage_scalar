@@ -1,0 +1,74 @@
+name: email-triage-env
+title: Email Triage Environment
+description: A realistic simulation of email triage for AI agents. Agents classify email urgency, draft responses, and prioritize inbox to complete tasks like resolving customer queries or scheduling meetings.
+author: Team Dragon
+version: 1.0.0
+license: MIT
+tags:
+  - real-world
+  - nlp
+  - decision-making
+  - email
+  - triage
+tasks:
+  - name: easy
+    description: "Classify 5 emails by urgency (low/medium/high)"
+  - name: medium
+    description: "Classify 6 emails and draft responses for high-priority items"
+  - name: hard
+    description: "Full triage: classify 10 emails, draft responses, and provide optimal priority order"
+max_episode_steps: 30
+action:
+  type: object
+  properties:
+    classification:
+      type: object
+      additionalProperties:
+        type: string
+        enum: [low, medium, high]
+    response:
+      type: object
+      additionalProperties:
+        type: string
+        maxLength: 200
+    priority_order:
+      type: array
+      items:
+        type: integer
+      maxItems: 10
+observation:
+  type: object
+  properties:
+    emails:
+      type: array
+      items:
+        type: object
+        properties:
+          id: {type: integer}
+          subject: {type: string}
+          body: {type: string}
+          sender: {type: string}
+    current_task:
+      type: string
+    task_progress:
+      type: string
+reward:
+  type: object
+  properties:
+    score:
+      type: number
+      minimum: 0.0
+      maximum: 1.0
+    feedback:
+      type: string
+endpoints:
+  - path: /
+    method: POST
+    summary: step
+  - path: /reset
+    method: POST
+    summary: reset
+  - path: /state
+    method: GET
+    summary: state
+
