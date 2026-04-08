@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Body
 from pydantic import BaseModel
 from typing import Dict, Any, Union, List, Optional
 import uvicorn
@@ -92,9 +92,11 @@ def welcome():
         "status": "online"
     }
 
-# POST method for OpenEnv submission (required)
+# POST method for OpenEnv submission - accepts optional body
 @app.post("/reset", response_model=Dict[str, Any])
-def reset_post(request: ResetRequest):
+def reset_post(request: Optional[ResetRequest] = None):
+    if request is None:
+        request = ResetRequest()
     obs = env.reset(task=request.task, emails=request.emails, goal=request.goal)
     return obs.model_dump()
 
