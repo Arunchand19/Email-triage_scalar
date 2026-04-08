@@ -41,13 +41,16 @@ dev = [
     "pytest>=8.3.3",
 ]
 
+[project.scripts]
+server = "server.app:main"
+
 [project.urls]
 Homepage = "https://github.com/Arunchand19/Email-triage_scalar"
 Repository = "https://github.com/Arunchand19/Email-triage_scalar.git"
 "Bug Tracker" = "https://github.com/Arunchand19/Email-triage_scalar/issues"
 
 [tool.setuptools]
-packages = ["email_triage_env"]
+packages = ["server"]
 
 [tool.setuptools.package-data]
-email_triage_env = ["*.yaml", "*.yml"]
+server = ["*.yaml", "*.yml"]

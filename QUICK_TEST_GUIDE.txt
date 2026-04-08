@@ -1,0 +1,108 @@
+═══════════════════════════════════════════════════════════
+  QUICK TEST GUIDE - ALL 3 PRIORITIES FIXED
+═══════════════════════════════════════════════════════════
+
+🌐 LIVE APP: https://arunchand-my-env.hf.space
+
+═══════════════════════════════════════════════════════════
+
+🟢 LOW PRIORITY TEST CASES:
+═══════════════════════════════════════════════════════════
+
+Test 1:
+Subject: Weekly Newsletter
+Check out our latest updates and articles.
+✓ Expected: LOW
+
+Test 2:
+Subject: Special Offer
+Get 20% discount on all items this weekend.
+✓ Expected: LOW
+
+Test 3:
+Win a free iPhone now!
+✓ Expected: LOW
+
+═══════════════════════════════════════════════════════════
+
+🟡 MEDIUM PRIORITY TEST CASES:
+═══════════════════════════════════════════════════════════
+
+Test 4:
+Subject: Meeting Reminder
+Please attend the meeting at 4 PM today.
+✓ Expected: MEDIUM
+
+Test 5:
+Subject: Report Submission
+Submit the weekly report by tomorrow.
+✓ Expected: MEDIUM
+
+Test 6:
+Meeting at 5 PM
+✓ Expected: MEDIUM
+
+═══════════════════════════════════════════════════════════
+
+🔴 HIGH PRIORITY TEST CASES:
+═══════════════════════════════════════════════════════════
+
+Test 7:
+Subject: Urgent Refund Request
+I need my money back immediately. Please respond ASAP.
+✓ Expected: HIGH
+
+Test 8:
+Subject: Server Down
+The system is not working. Fix this immediately!
+✓ Expected: HIGH
+
+Test 9:
+URGENT refund needed
+✓ Expected: HIGH
+
+═══════════════════════════════════════════════════════════
+
+🎯 MIXED BATCH TEST:
+═══════════════════════════════════════════════════════════
+
+Paste all 3 together (separate with blank lines):
+
+Meeting at 5 PM
+
+URGENT refund needed
+
+Win a free iPhone now!
+
+Expected Results:
+📨 Email #1: 🟡 MEDIUM
+📨 Email #2: 🔴 HIGH
+📨 Email #3: 🟢 LOW
+
+Summary:
+  🔴 High Priority: 1
+  🟡 Medium Priority: 1
+  🟢 Low Priority: 1
+
+═══════════════════════════════════════════════════════════
+
+📊 KEYWORD REFERENCE:
+═══════════════════════════════════════════════════════════
+
+🟢 LOW:
+newsletter, offer, promotion, deal, sale, discount,
+subscribe, win, free, prize, weekend, exclusive
+
+🟡 MEDIUM:
+meeting, schedule, report, update, reminder, submit,
+deadline, discuss, attend
+
+🔴 HIGH:
+urgent, asap, immediately, critical, refund, bug,
+error, security, down, not working, fix
+
+═══════════════════════════════════════════════════════════
+
+✅ ALL 3 PRIORITIES NOW WORK CORRECTLY!
+
+Test at: https://arunchand-my-env.hf.space
