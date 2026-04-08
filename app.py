@@ -9,85 +9,88 @@ except:
     classifier = None
 
 def classify_single_email(email_text):
-    """Classify a single email using AI"""
+    """Classify a single email using improved rule-based system"""
     if not email_text or not email_text.strip():
         return "⚠️ Please enter email content to classify"
     
     email_lower = email_text.lower()
     
-    # Use AI model if available
-    if classifier:
-        try:
-            labels = ["urgent high priority", "medium priority", "low priority spam"]
-            result = classifier(email_text, labels)
-            top_label = result["labels"][0]
-            confidence = result["scores"][0]
-            
-            if "urgent" in top_label or "high" in top_label:
-                priority = "🔴 HIGH PRIORITY"
-            elif "medium" in top_label:
-                priority = "🟡 MEDIUM PRIORITY"
-            else:
-                priority = "🟢 LOW PRIORITY"
-            
-            return f"""
-📧 EMAIL CLASSIFICATION RESULT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📝 Your Email:
-{email_text[:200]}{'...' if len(email_text) > 200 else ''}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎯 Classification: {priority}
-📊 Confidence: {confidence:.2%}
-
-💡 AI Analysis:
-{top_label.upper()}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-"""
-        except Exception as e:
-            pass
-    
-    # Fallback: Rule-based classification
+    # Enhanced keyword detection with weights
     score = 0
     reasons = []
+    detected_category = None
     
-    # High priority keywords
-    urgent_keywords = ["urgent", "asap", "immediately", "critical", "emergency", "important", 
-                       "deadline", "refund", "complaint", "bug", "error", "security", "breach"]
-    for keyword in urgent_keywords:
+    # HIGH PRIORITY keywords (score +3 each)
+    high_keywords = {
+        "urgent": 3, "asap": 3, "immediately": 3, "critical": 3, 
+        "emergency": 3, "refund": 3, "complaint": 3, "bug": 3,
+        "error": 3, "security": 3, "breach": 3, "down": 3,
+        "not working": 3, "fix": 2, "problem": 2, "issue": 2
+    }
+    
+    # MEDIUM PRIORITY keywords (score +1 each)
+    medium_keywords = {
+        "meeting": 1, "schedule": 1, "report": 1, "update": 1,
+        "review": 1, "question": 1, "request": 1, "follow up": 1,
+        "reminder": 1, "submit": 1, "deadline": 1, "attend": 1,
+        "discuss": 1, "call": 1, "appointment": 1
+    }
+    
+    # LOW PRIORITY keywords (score -2 each, stronger negative weight)
+    low_keywords = {
+        "newsletter": -2, "subscribe": -2, "offer": -2, "promotion": -2,
+        "deal": -2, "sale": -2, "discount": -2, "unsubscribe": -2,
+        "marketing": -2, "advertisement": -2, "win": -2, "free": -2,
+        "congratulations": -2, "prize": -2, "special offer": -3,
+        "limited time": -2, "exclusive": -2, "check out": -2,
+        "latest updates": -2, "articles": -2, "weekend": -2
+    }
+    
+    # Check HIGH priority keywords first
+    for keyword, weight in high_keywords.items():
         if keyword in email_lower:
-            score += 3
-            reasons.append(f"Contains urgent keyword: '{keyword}'")
+            score += weight
+            reasons.append(f"HIGH: '{keyword}'")
+            detected_category = "HIGH"
     
-    # Medium priority keywords
-    medium_keywords = ["meeting", "schedule", "report", "update", "review", "question", 
-                       "request", "follow up", "reminder"]
-    for keyword in medium_keywords:
+    # Check LOW priority keywords (these should override medium if present)
+    low_score = 0
+    for keyword, weight in low_keywords.items():
         if keyword in email_lower:
-            score += 1
-            reasons.append(f"Contains medium priority keyword: '{keyword}'")
+            low_score += weight
+            reasons.append(f"LOW: '{keyword}'")
+            if detected_category != "HIGH":
+                detected_category = "LOW"
     
-    # Low priority keywords
-    low_keywords = ["newsletter", "subscribe", "offer", "promotion", "deal", "sale", 
-                    "unsubscribe", "marketing", "advertisement"]
-    for keyword in low_keywords:
-        if keyword in email_lower:
-            score -= 1
-            reasons.append(f"Contains low priority keyword: '{keyword}'")
-    
-    # Determine priority
-    if score >= 3:
-        priority = "🔴 HIGH PRIORITY"
-        action = "⚡ Respond immediately"
-    elif score >= 1:
-        priority = "🟡 MEDIUM PRIORITY"
-        action = "📅 Respond within 24 hours"
+    # Check MEDIUM priority keywords only if no LOW keywords found
+    if low_score == 0:
+        for keyword, weight in medium_keywords.items():
+            if keyword in email_lower:
+                score += weight
+                reasons.append(f"MEDIUM: '{keyword}'")
+                if detected_category != "HIGH":
+                    detected_category = "MEDIUM"
     else:
+        score += low_score
+    
+    # Determine final priority with improved logic
+    if detected_category == "LOW" or score < 0:
         priority = "🟢 LOW PRIORITY"
-        action = "📋 Review when convenient"
+        action = "📋 Review when convenient (Informational/Marketing)"
+        priority_level = "LOW"
+    elif score >= 3 or detected_category == "HIGH":
+        priority = "🔴 HIGH PRIORITY"
+        action = "⚡ Respond immediately (Urgent/Critical)"
+        priority_level = "HIGH"
+    elif score >= 1 or detected_category == "MEDIUM":
+        priority = "🟡 MEDIUM PRIORITY"
+        action = "📅 Respond within 24 hours (Work/Normal Tasks)"
+        priority_level = "MEDIUM"
+    else:
+        # Default to LOW if no clear indicators
+        priority = "🟢 LOW PRIORITY"
+        action = "📋 Review when convenient (No urgent indicators)"
+        priority_level = "LOW"
     
     # Generate response
     result = f"""
@@ -100,19 +103,20 @@ def classify_single_email(email_text):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 Classification: {priority}
-📊 Priority Score: {score}/10
+📊 Priority Score: {score}
 
 💡 Analysis:
 """
     
     if reasons:
-        for reason in reasons[:3]:
-            result += f"\n  • {reason}"
+        result += f"\n  Detected Keywords:\n"
+        for reason in reasons[:5]:
+            result += f"  • {reason}\n"
     else:
-        result += "\n  • No specific keywords detected"
-        result += "\n  • Classified as standard email"
+        result += "\n  • No specific keywords detected\n"
+        result += "  • Classified as LOW priority by default\n"
     
-    result += f"\n\n✅ Recommended Action:\n  {action}\n"
+    result += f"\n✅ Recommended Action:\n  {action}\n"
     result += "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
     
     return result
@@ -122,7 +126,7 @@ def classify_multiple_emails(emails_text):
     if not emails_text or not emails_text.strip():
         return "⚠️ Please enter email content to classify"
     
-    # Split by double newlines or numbered lines
+    # Split by double newlines
     emails = [e.strip() for e in emails_text.split('\n\n') if e.strip()]
     
     if len(emails) == 1:
@@ -136,13 +140,13 @@ def classify_multiple_emails(emails_text):
     medium_count = 0
     low_count = 0
     
-    for i, email in enumerate(emails[:10], 1):  # Limit to 10 emails
+    for i, email in enumerate(emails[:10], 1):
         classification = classify_single_email(email)
         
-        if "HIGH PRIORITY" in classification:
+        if "🔴 HIGH PRIORITY" in classification:
             high_count += 1
             priority = "🔴 HIGH"
-        elif "MEDIUM PRIORITY" in classification:
+        elif "🟡 MEDIUM PRIORITY" in classification:
             medium_count += 1
             priority = "🟡 MEDIUM"
         else:
@@ -162,11 +166,13 @@ def classify_multiple_emails(emails_text):
 
 # Example emails for users to try
 examples = [
-    ["URGENT: Customer refund request - Order #12345 needs immediate attention!"],
-    ["Hi, can we schedule a meeting next week to discuss the project?"],
-    ["Subscribe to our newsletter for exclusive deals and offers!"],
-    ["CRITICAL BUG: Production server is down, users cannot access the application"],
-    ["Reminder: Monthly report submission deadline is tomorrow"]
+    ["Subject: Weekly Newsletter\nCheck out our latest updates and articles."],
+    ["Subject: Special Offer\nGet 20% discount on all items this weekend."],
+    ["Subject: Meeting Reminder\nPlease attend the meeting at 4 PM today."],
+    ["Subject: Report Submission\nSubmit the weekly report by tomorrow."],
+    ["Subject: Urgent Refund Request\nI need my money back immediately. Please respond ASAP."],
+    ["Subject: Server Down\nThe system is not working. Fix this immediately!"],
+    ["Meeting at 5 PM\n\nURGENT refund needed\n\nWin a free iPhone now!"]
 ]
 
 # Create Gradio interface
@@ -174,7 +180,12 @@ with gr.Blocks(title="📧 Email Triage System", theme=gr.themes.Soft()) as demo
     gr.Markdown("""
     # 📧 AI-Powered Email Triage System
     
-    Automatically classify and prioritize your emails using AI technology.
+    Automatically classify and prioritize your emails with high accuracy.
+    
+    **Priority Levels:**
+    - 🔴 **HIGH**: Urgent/Critical (refund, bug, emergency, ASAP)
+    - 🟡 **MEDIUM**: Work/Normal Tasks (meeting, report, schedule)
+    - 🟢 **LOW**: Informational/Marketing (newsletter, offer, promotion)
     
     **How to use:**
     1. Paste your email content in the text box below
@@ -197,7 +208,7 @@ with gr.Blocks(title="📧 Email Triage System", theme=gr.themes.Soft()) as demo
                 lines=15
             )
     
-    gr.Markdown("### 💡 Try These Examples:")
+    gr.Markdown("### 💡 Try These Test Cases:")
     gr.Examples(
         examples=examples,
         inputs=email_input,
@@ -214,10 +225,13 @@ with gr.Blocks(title="📧 Email Triage System", theme=gr.themes.Soft()) as demo
     
     gr.Markdown("""
     ---
-    ### 🎯 Priority Levels:
-    - 🔴 **HIGH**: Urgent matters requiring immediate attention
-    - 🟡 **MEDIUM**: Important but not urgent, respond within 24 hours
-    - 🟢 **LOW**: Informational, review when convenient
+    ### 🎯 Keyword Detection:
+    
+    | Priority | Keywords |
+    |----------|----------|
+    | 🔴 HIGH | urgent, asap, immediately, critical, refund, bug, error, security, down |
+    | 🟡 MEDIUM | meeting, schedule, report, update, reminder, submit, deadline, discuss |
+    | 🟢 LOW | newsletter, offer, promotion, deal, sale, discount, subscribe, win, free |
     
     ### 👥 Team Dragon
     Built by: Mallarapu Arun Chand & T. Someswararao
