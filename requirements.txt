@@ -1,4 +1,6 @@
 gradio
+transformers
+torch
 pydantic==2.8.2
 pydantic-settings==2.5.2
 python-dotenv
