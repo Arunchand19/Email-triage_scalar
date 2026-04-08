@@ -92,9 +92,16 @@ def welcome():
         "status": "online"
     }
 
+# POST method for OpenEnv submission (required)
 @app.post("/reset", response_model=Dict[str, Any])
-def reset(request: ResetRequest):
+def reset_post(request: ResetRequest):
     obs = env.reset(task=request.task, emails=request.emails, goal=request.goal)
+    return obs.model_dump()
+
+# GET method for easy browser testing
+@app.get("/reset", response_model=Dict[str, Any])
+def reset_get(task: str = "easy"):
+    obs = env.reset(task=task)
     return obs.model_dump()
 
 @app.get("/state", response_model=State)
