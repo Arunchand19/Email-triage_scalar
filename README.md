@@ -1,33 +1,39 @@
 ---
-title: Email Triage System
+title: Email Triage OpenEnv
 emoji: 📧
-colorFrom: green
-colorTo: gray
-sdk: gradio
-sdk_version: 5.9.1
-app_file: app.py
+colorFrom: blue
+colorTo: green
+sdk: docker
 pinned: false
 license: mit
 ---
 
-# 📧 Email Triage System
+# 📧 Email Triage OpenEnv
 
-AI-powered email classification and prioritization system built with Gradio.
+OpenEnv-compliant environment for email triage and prioritization tasks.
 
-## Features
+## Environment Description
 
-- **Email Classification**: Automatically categorize emails by urgency (low/medium/high)
-- **Priority Management**: Intelligent email prioritization
-- **Multiple Difficulty Levels**: Easy, Medium, and Hard task modes
+The Email Triage Environment simulates real-world email management scenarios where agents must:
+- Classify emails by urgency (low/medium/high)
+- Draft appropriate responses
+- Prioritize emails for optimal workflow
 
-## How to Use
+## API Endpoints
 
-1. Select a task difficulty level
-2. Optionally add context
-3. Click Submit to see the triage results
+- `POST /reset` - Reset environment with task configuration
+- `POST /` - Step through environment with actions
+- `GET /state` - Get current environment state
+- `GET /health` - Health check endpoint
+- `WS /ws` - WebSocket interface for interactive sessions
 
-## Team
+## Tasks
 
-**Team Dragon**
+- **Easy**: Classify 5 emails correctly
+- **Medium**: Classify 6 emails and draft responses
+- **Hard**: Full triage with 10 emails, responses, and priority ordering
+
+## Team Dragon
+
 - Mallarapu Arun Chand - arunchandmallarapu@gmail.com
 - T. Someswararao - someshtellakula@gmail.com
