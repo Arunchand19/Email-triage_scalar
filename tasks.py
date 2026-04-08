@@ -13,10 +13,20 @@ def _grade_classif(email_id: int, cls: str) -> bool:
 def _grade_priority(order: List[int]) -> float:
     ideal = [2, 6, 10, 8, 1, 3, 4, 7, 9, 5]
     if len(order) != 10:
-        return 0.0
+        return 0.01  # Minimum score instead of 0.0
     score = sum(1 for i, eid in enumerate(order[:5]) if i < len(ideal) and eid == ideal[i]) / 5.0
     tail_match = sum(1 for eid in ideal[5:] if eid in order[5:]) / 5.0
-    return score * 0.8 + tail_match * 0.2
+    raw_score = score * 0.8 + tail_match * 0.2
+    # Clamp to (0.01, 0.99)
+    return max(0.01, min(0.99, raw_score))
+
+def _clamp_score(score: float) -> float:
+    """Ensure score is strictly between 0 and 1"""
+    if score <= 0.0:
+        return 0.01
+    elif score >= 1.0:
+        return 0.99
+    return score
 
 # Hardcoded realistic emails
 EASY_EMAILS = [
@@ -42,12 +52,14 @@ TASKS = {
     "easy": {
         "emails": EASY_EMAILS,
         "goal": "Classify all 5 emails correctly: spam=low, refund=high, meeting=medium, report=medium, invite=low",
-        "grader": lambda actions: sum(1 for eid, cls in actions['classification'].items() if _grade_classif(eid, cls)) / 5.0
+        "grader": lambda actions: _clamp_score(
+            sum(1 for eid, cls in actions['classification'].items() if _grade_classif(eid, cls)) / 5.0
+        )
     },
     "medium": {
         "emails": MEDIUM_EMAILS,
         "goal": "Classify 6 emails and draft responses for high-priority items (refund, meeting, report, bug)",
-        "grader": lambda actions: (
+        "grader": lambda actions: _clamp_score(
             sum(1 for eid, cls in actions['classification'].items() if _grade_classif(eid, cls)) / 6.0 * 0.6 +
             sum(1 for eid in [2, 3, 4, 6] if eid in actions.get('response', {}) and len(actions['response'][eid].strip()) > 20) / 4.0 * 0.4
         ),
@@ -55,7 +67,7 @@ TASKS = {
     "hard": {
         "emails": HARD_EMAILS,
         "goal": "Full triage: classify 10 emails, draft responses for critical items, and provide optimal priority order [2,6,10,8,1,3,4,7,9,5]",
-        "grader": lambda actions: (
+        "grader": lambda actions: _clamp_score(
             0.3 * _grade_priority(actions.get('priority_order', [])) +
             0.4 * (sum(1 for eid in [2, 6, 8, 10] if eid in actions.get('response', {}) and len(actions['response'][eid]) > 20) / 4.0) +
             0.3 * (sum(1 for eid in [2, 6, 8, 10] if eid in actions.get('classification', {}) and _grade_classif(eid, actions['classification'][eid])) / 4.0)
