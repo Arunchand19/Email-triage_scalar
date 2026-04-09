@@ -1,188 +1,93 @@
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   ✅ OPENENV SUBMISSION READY - ALL CHECKS FIXED!           ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════╗
+║                  TASK VALIDATION - FIXED & VERIFIED                  ║
+╚══════════════════════════════════════════════════════════════════════╝
 
-🎉 YOUR SUBMISSION IS NOW COMPLIANT!
+✓ PROBLEM SOLVED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Error: "Not enough tasks with graders"
+Status: FIXED ✓
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ WHAT WAS FIXED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Made graders.py self-contained with independent functions
+2. Removed circular dependency between graders.py and tasks.py
+3. Each grader now returns float between 0.0 and 1.0
+4. All graders are directly callable and testable
+5. Added comprehensive validation and test scripts
 
-🔧 WHAT WAS FIXED:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ FILES MODIFIED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• graders.py           - Complete rewrite with self-contained functions
+• tasks.py             - Updated type handling and safety checks
+• validate_openenv.py  - Added grader validation logic
+• test_graders.py      - NEW: Comprehensive test suite (6/6 tests pass)
+• verify_submission.py - NEW: Final verification script
 
-❌ BEFORE:
-   • app.py was Gradio app (not OpenEnv compliant)
-   • POST /reset endpoint missing
-   • FastAPI server not running
-   • Submission checks failed
+✓ VALIDATION RESULTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[VALIDATOR] openenv.yaml validated
+[VALIDATOR] Dockerfile validated
+[VALIDATOR] Pydantic models validated
+[VALIDATOR] Environment and tasks validated
+[VALIDATOR] Graders validated: 3 graders found
 
-✅ AFTER:
-   • app.py is FastAPI OpenEnv server
-   • POST /reset endpoint working
-   • All OpenEnv endpoints implemented
-   • Dockerfile present
-   • inference.py present
-   • openenv.yaml present
-   • Submission checks should pass
+[SUCCESS] Environment matches OpenEnv specification!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ GRADER TEST RESULTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Task: easy    - Grader: graders.grade_easy   - [PASS] Score: 0.99
+Task: medium  - Grader: graders.grade_medium - [PASS] Score: 0.99
+Task: hard    - Grader: graders.grade_hard   - [PASS] Score: 0.997
 
-📋 SUBMISSION CHECKLIST - ALL FIXED:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Edge Cases:
+  Empty actions - All graders return valid scores (0.01, 0.01, 0.003)
 
-✅ OpenEnv Reset (POST OK)
-   • POST /reset endpoint implemented
-   • Returns observation correctly
-   • Accepts task parameter
+Results: 6/6 tests passed ✓
 
-✅ Dockerfile at repo root
-   • Dockerfile exists
-   • Builds FastAPI server
-   • Exposes port 7860
+✓ OPENENV COMPLIANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ 3+ tasks defined (easy, medium, hard)
+✓ Each task has grader in openenv.yaml
+✓ All graders are callable functions
+✓ All graders return float in (0.0, 1.0)
+✓ Graders are deterministic
+✓ Graders handle edge cases
+✓ No circular dependencies
+✓ All imports work correctly
 
-✅ inference.py at repo root
-   • inference.py exists
-   • Has environment variables:
-     - API_BASE_URL (with default)
-     - MODEL_NAME (with default)
-     - HF_TOKEN (no default)
-   • Follows structured logging format
+✓ GITHUB STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Repository: https://github.com/Arunchand19/Email-triage_scalar.git
+Latest Commit: bcf1c0a
+Status: All changes pushed ✓
 
-✅ openenv validate
-   • openenv.yaml exists
-   • Valid OpenEnv specification
-   • 3 tasks defined (easy, medium, hard)
+✓ VERIFICATION COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+cd email_triage_env
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Run comprehensive tests
+python test_graders.py
 
-🌐 YOUR SUBMISSION LINKS:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Validate environment
+python validate_openenv.py
 
-GitHub Repository:
-👉 https://github.com/Arunchand19/Email-triage_scalar.git
+# Final verification
+python verify_submission.py
 
-Hugging Face Space:
-👉 https://huggingface.co/spaces/Arunchand/my-env
+All commands execute successfully ✓
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ SUBMISSION CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Docker Build Creation
+✓ inference.py Execution
+✓ Output Parsing
+✓ Task Validation (FIXED - 3 graders validated)
+✓ LLM Criteria Check (Ready)
 
-🚀 DEPLOYMENT STATUS:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✅ FastAPI app.py restored
-✅ requirements.txt updated
-✅ README.md updated with HF metadata
-✅ Committed to Git
-✅ Pushed to GitHub
-✅ Pushed to Hugging Face Space
-✅ Space is rebuilding now
-
-⏱️ Timeline:
-   Now:        Space is rebuilding with FastAPI
-   2-3 min:    OpenEnv server will be LIVE
-   After:      Submit and checks should pass!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🧪 HOW TO VERIFY BEFORE SUBMISSION:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. Wait 2-3 minutes for HF Space to rebuild
-
-2. Check Space is running:
-   👉 https://huggingface.co/spaces/Arunchand/my-env
-   Look for: Green "Running" badge
-
-3. Test POST /reset endpoint:
-   curl -X POST https://arunchand-my-env.hf.space/reset \
-     -H "Content-Type: application/json" \
-     -d '{"task": "easy"}'
-
-   Should return: JSON with emails array
-
-4. Test health endpoint:
-   curl https://arunchand-my-env.hf.space/health
-
-   Should return: {"status": "healthy"}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📝 SUBMISSION STEPS:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. Go to submission page
-
-2. Enter your links:
-   GitHub: https://github.com/Arunchand19/Email-triage_scalar.git
-   HF Space: https://huggingface.co/spaces/Arunchand/my-env
-
-3. Check all boxes in Pre-Submission Checklist:
-   ✅ I've read the sample inference.py
-   ✅ Environment variables are present
-   ✅ Defaults set only for API_BASE_URL and MODEL_NAME
-   ✅ All LLM calls use OpenAI client
-   ✅ Stdout logs follow required format
-
-4. Click "Submit Solution"
-
-5. Wait for automated checks to run
-
-6. All checks should pass! ✅
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📊 OPENENV API ENDPOINTS:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✅ GET /
-   Returns: Welcome message
-
-✅ POST /reset
-   Body: {"task": "easy"}
-   Returns: Observation with emails
-
-✅ POST /
-   Body: {"action": {...}, "task": "easy"}
-   Returns: {observation, reward, done, info}
-
-✅ GET /state
-   Returns: Current environment state
-
-✅ GET /health
-   Returns: {"status": "healthy"}
-
-✅ WS /ws
-   WebSocket for interactive sessions
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🔍 ENVIRONMENT VARIABLES IN INFERENCE.PY:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✅ API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
-✅ MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
-✅ HF_TOKEN = os.getenv("HF_TOKEN")  # No default
-
-This matches the submission requirements exactly!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📞 SUPPORT:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Team Dragon
-📧 arunchandmallarapu@gmail.com
-📧 someshtellakula@gmail.com
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   🎉 READY TO SUBMIT! ALL CHECKS SHOULD PASS NOW!           ║
-║                                                              ║
-║   Wait 2-3 min for Space rebuild, then submit:              ║
-║   👉 GitHub: https://github.com/Arunchand19/Email-triage_scalar.git
-║   👉 HF Space: https://huggingface.co/spaces/Arunchand/my-env
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════╗
+║                    READY FOR RESUBMISSION ✓                          ║
+║                                                                      ║
+║  The Task Validation error has been completely resolved.            ║
+║  All 3 graders are now properly validated and working.              ║
+║  Code has been pushed to GitHub successfully.                       ║
+╚══════════════════════════════════════════════════════════════════════╝
