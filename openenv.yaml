@@ -13,13 +13,13 @@ tags:
 tasks:
   - name: easy
     description: "Classify 5 emails by urgency (low/medium/high)"
-    grader: graders:grade_easy
+    grader: "graders.grade_easy"
   - name: medium
     description: "Classify 6 emails and draft responses for high-priority items"
-    grader: graders:grade_medium
+    grader: "graders.grade_medium"
   - name: hard
     description: "Full triage: classify 10 emails, draft responses, and provide optimal priority order"
-    grader: graders:grade_hard
+    grader: "graders.grade_hard"
 max_episode_steps: 30
 action:
   type: object
