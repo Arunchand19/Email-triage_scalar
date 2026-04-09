@@ -59,6 +59,27 @@ def validate():
     except ImportError as e:
         fail(f"Failed to import environment/tasks: {e}")
 
+    # 5. Check Graders
+    try:
+        import graders
+        grader_count = 0
+        for task in config.get("tasks", []):
+            grader_path = task.get("grader", "")
+            if grader_path:
+                module_name, func_name = grader_path.rsplit(".", 1)
+                if module_name == "graders" and hasattr(graders, func_name):
+                    grader_func = getattr(graders, func_name)
+                    if callable(grader_func):
+                        grader_count += 1
+        
+        if grader_count < 3:
+            fail(f"Add (or enable) graders for at least 3 tasks, then resubmit. Found {grader_count} graders")
+        log(f"Graders validated: {grader_count} graders found")
+    except ImportError as e:
+        fail(f"Failed to import graders: {e}")
+    except Exception as e:
+        fail(f"Grader validation error: {e}")
+
     print("\n[SUCCESS] Environment matches OpenEnv specification!")
 
 if __name__ == "__main__":
