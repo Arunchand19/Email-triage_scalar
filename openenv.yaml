@@ -13,10 +13,13 @@ tags:
 tasks:
   - name: easy
     description: "Classify 5 emails by urgency (low/medium/high)"
+    grader: tasks:TASKS.easy.grader
   - name: medium
     description: "Classify 6 emails and draft responses for high-priority items"
+    grader: tasks:TASKS.medium.grader
   - name: hard
     description: "Full triage: classify 10 emails, draft responses, and provide optimal priority order"
+    grader: tasks:TASKS.hard.grader
 max_episode_steps: 30
 action:
   type: object
@@ -71,4 +74,3 @@ endpoints:
   - path: /state
     method: GET
     summary: state
-
