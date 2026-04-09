@@ -53,24 +53,24 @@ TASKS = {
         "emails": EASY_EMAILS,
         "goal": "Classify all 5 emails correctly: spam=low, refund=high, meeting=medium, report=medium, invite=low",
         "grader": lambda actions: _clamp_score(
-            sum(1 for eid, cls in actions['classification'].items() if _grade_classif(eid, cls)) / 5.0
+            sum(1 for eid, cls in actions.get('classification', {}).items() if _grade_classif(int(eid), cls)) / 5.0
         )
     },
     "medium": {
         "emails": MEDIUM_EMAILS,
         "goal": "Classify 6 emails and draft responses for high-priority items (refund, meeting, report, bug)",
         "grader": lambda actions: _clamp_score(
-            sum(1 for eid, cls in actions['classification'].items() if _grade_classif(eid, cls)) / 6.0 * 0.6 +
-            sum(1 for eid in [2, 3, 4, 6] if eid in actions.get('response', {}) and len(actions['response'][eid].strip()) > 20) / 4.0 * 0.4
-        ),
+            sum(1 for eid, cls in actions.get('classification', {}).items() if _grade_classif(int(eid), cls)) / 6.0 * 0.6 +
+            sum(1 for eid in [2, 3, 4, 6] if eid in actions.get('response', {}) and len(str(actions['response'][eid]).strip()) > 20) / 4.0 * 0.4
+        )
     },
     "hard": {
         "emails": HARD_EMAILS,
         "goal": "Full triage: classify 10 emails, draft responses for critical items, and provide optimal priority order [2,6,10,8,1,3,4,7,9,5]",
         "grader": lambda actions: _clamp_score(
             0.3 * _grade_priority(actions.get('priority_order', [])) +
-            0.4 * (sum(1 for eid in [2, 6, 8, 10] if eid in actions.get('response', {}) and len(actions['response'][eid]) > 20) / 4.0) +
-            0.3 * (sum(1 for eid in [2, 6, 8, 10] if eid in actions.get('classification', {}) and _grade_classif(eid, actions['classification'][eid])) / 4.0)
-        ),
+            0.4 * (sum(1 for eid in [2, 6, 8, 10] if eid in actions.get('response', {}) and len(str(actions['response'][eid])) > 20) / 4.0) +
+            0.3 * (sum(1 for eid in [2, 6, 8, 10] if int(eid) in actions.get('classification', {}) and _grade_classif(int(eid), actions['classification'][int(eid)])) / 4.0)
+        )
     }
 }
