@@ -22,8 +22,8 @@ if env_file.exists():
                 key, value = line.split('=', 1)
                 os.environ.setdefault(key.strip(), value.strip())
 
-# MANDATORY environment variables
-API_KEY = os.getenv("HF_TOKEN")
+# MANDATORY environment variables - use API_KEY (injected by validator) or HF_TOKEN (local)
+API_KEY = os.getenv("API_KEY") or os.getenv("HF_TOKEN")
 API_BASE_URL = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
 TASK_NAME = os.getenv("EMAIL_TRIAGE_TASK", "easy")
@@ -146,12 +146,13 @@ def get_model_action(client: OpenAI, obs, task_name: str) -> Action:
 
 async def main() -> None:
     if not MOCK_MODE and not API_KEY:
-        print("[ERROR] HF_TOKEN not found. Run with --mock or set HF_TOKEN environment variable.", flush=True)
+        print("[ERROR] API_KEY not found. Run with --mock or set API_KEY environment variable.", flush=True)
         print("\nExample usage:", flush=True)
         print("  Mock mode:  python inference.py --mock", flush=True)
-        print("  Real mode:  export HF_TOKEN='your_token' && python inference.py", flush=True)
+        print("  Real mode:  export API_KEY='your_token' && python inference.py", flush=True)
         return
 
+    # Initialize OpenAI client with environment variables
     client = None if MOCK_MODE else OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
     env = EmailTriageEnv()
 
@@ -190,4 +191,3 @@ async def main() -> None:
 
 if __name__ == "__main__":
     asyncio.run(main())
-
