@@ -36,4 +36,3 @@ The Email Triage Environment simulates real-world email management scenarios whe
 ## Team Dragon
 
 - Mallarapu Arun Chand - arunchandmallarapu@gmail.com
-- T. Someswararao - someshtellakula@gmail.com
